@@ -1,34 +1,34 @@
 # 📦 LogiVision AI - Smart Inventory Placement System
 
-LogiVision is an AI-powered logistics assistant designed for Hackathons. It helps users organize their storage spaces (warehouses, retail shelves, or home storage) by analyzing photos and inventory lists using the Gemini AI model.
+LogiVision is an AI-powered logistics assistant designed for Hackathons. It helps users organize their storage spaces by analyzing photos and inventory lists using the Gemini AI model, with a heavy focus on safety and spatial efficiency.
 
-![LogiVision Dashboard](media/ss.png) <!-- Placeholder for actual screenshot if available -->
+![LogiVision Dashboard](media/ss.png)
 
-## 🚀 Features
+## 🚀 Key Features
 
 - **AI Room Analysis**: Automatically detects suitable placement spots for items in a room photo.
-- **Smart Logic**: Prioritizes safety and physics (Heavy items on the floor, fragile items on top shelves).
+- **AI Safety Auditor (K3)**: 
+    - Automatically detects potential hazards (e.g., blocked exits, liquids near electronics, precarious stacking).
+    - Visualizes hazards with pulsing red overlays and warning icons.
+- **Space Utilization Score**: 
+    - AI-estimated shelf/area density score (0-100%).
+    - Color-coded progress bars (Green: Low, Yellow: Medium, Red: High Density).
+- **Find My Item (Smart Search)**: 
+    - Real-time search bar to filter and highlight specific items on the map.
+    - Dimming effect for non-matching items to improve focus.
 - **Interactive Visual Overlays**: 
-    - Hover over boxes in the image to highlight the item details.
-    - Hover over the list to find the corresponding box in the image.
-- **Modern Dashboard**: Built with a clean, responsive "Modern Dashboard" aesthetic using Tailwind CSS.
-- **Professional PDF Export**: Generate high-quality, multi-page PDF reports for offline use, including the annotated image and detailed recommendations.
+    - Bidirectional highlighting between image boxes and the detail list.
+- **Professional PDF Report**: 
+    - Generates a multi-page A4 document report.
+    - Includes Safety Audit findings and Placement Recommendations with density metrics.
 
 ## 🛠️ Tech Stack
 
 - **Framework**: Laravel 10
-- **AI Model**: Google Gemini 3 Flash
-- **Frontend**: Tailwind CSS (via CDN)
-- **JavaScript Libraries**:
-    - `html2canvas`: For capturing the visual analysis.
-    - `jsPDF`: For generating professional document reports.
-- **API**: Google Generative Language API (`Http` client).
-
-## 📋 Requirements
-
-- PHP >= 8.1
-- Composer
-- Google Gemini API Key ([Get it here](https://aistudio.google.com/))
+- **AI Model**: Google Gemini 1.5 Pro
+- **Frontend**: Tailwind CSS (CDN)
+- **PDF Generation**: `html2canvas` & `jsPDF` (Client-side rendering)
+- **API**: Google Generative Language API
 
 ## ⚙️ Installation
 
@@ -41,38 +41,25 @@ LogiVision is an AI-powered logistics assistant designed for Hackathons. It help
 2. **Install dependencies**:
    ```bash
    composer install
-   npm install && npm run dev
    ```
 
 3. **Configure Environment**:
-   Copy the `.env.example` to `.env` and add your Gemini API Key.
    ```bash
    cp .env.example .env
    ```
-   Edit `.env`:
-   ```env
-   GEMINI_API_KEY=your_api_key_here
-   ```
+   Edit `.env` and add your key: `GEMINI_API_KEY=your_api_key_here`.
 
-4. **Generate Application Key**:
+4. **Run the Application**:
    ```bash
    php artisan key:generate
-   ```
-
-5. **Run the Application**:
-   ```bash
    php artisan serve
    ```
-   Visit `http://127.0.0.1:8000` in your browser.
+   Visit `http://127.0.0.1:8000`.
 
-## 💡 How to Use
+## 💡 Usage
 
-1. **Upload a Photo**: Take a photo of your empty shelf, room, or warehouse space.
-2. **List your Items**: Enter your inventory list (e.g., "3 heavy boxes of ceramic tiles, 1 glass vase, 5 bags of cement").
-3. **Analyze**: Click "Analyze Layout".
-4. **Interact**: Use the visual overlays to understand the suggestions.
-5. **Export**: Click "Export PDF" to save the report for offline use.
-
-## 📄 License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+1. **Upload**: Take a photo of your storage space.
+2. **List**: Type your inventory items.
+3. **Analyze**: AI will suggest placements, score space density, and flag safety hazards.
+4. **Search**: Use the "Find My Item" bar to locate specific goods instantly.
+5. **Export**: Download the official PDF report for offline field use.
