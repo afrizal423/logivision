@@ -143,42 +143,71 @@
                             <div class="relative inline-block w-full h-auto max-h-[400px] shadow-lg rounded-lg overflow-hidden group">
                                 <img src="data:{{ $mime_type }};base64,{{ $image }}" class="w-full h-full object-contain block bg-slate-200" alt="Room Analysis">
                                 
-                                @foreach($recommendations as $index => $rec)
+                            <!-- Overlays -->
+                            
+                            <!-- Safety Hazards -->
+                            @if(isset($hazards))
+                                @foreach($hazards as $haz)
                                     @php
-                                        $reasoning = strtolower($rec['reasoning']);
-                                        $borderColor = 'border-green-500';
-                                        $bgColor = 'bg-green-500/20';
-                                        $typeColor = 'bg-green-500';
-                                        
-                                        if (str_contains($reasoning, 'heavy') || str_contains($reasoning, 'bottom') || str_contains($reasoning, 'floor') || ($rec['type'] ?? '') === 'heavy') {
-                                            $borderColor = 'border-red-500';
-                                            $bgColor = 'bg-red-500/20';
-                                            $typeColor = 'bg-red-500';
-                                        } elseif (str_contains($reasoning, 'fragile') || str_contains($reasoning, 'glass') || ($rec['type'] ?? '') === 'fragile') {
-                                            $borderColor = 'border-yellow-400';
-                                            $bgColor = 'bg-yellow-400/20';
-                                            $typeColor = 'bg-yellow-400';
-                                        }
-                                        
-                                        $box = $rec['box_2d'];
+                                        $box = $haz['box_2d'];
                                         $top = ($box[0] / 1000) * 100;
                                         $left = ($box[1] / 1000) * 100;
                                         $height = (($box[2] - $box[0]) / 1000) * 100;
                                         $width = (($box[3] - $box[1]) / 1000) * 100;
                                     @endphp
-
-                                    <div id="box-{{ $index }}" 
-                                         class="absolute border-2 {{ $borderColor }} {{ $bgColor }} transition-all duration-200 cursor-pointer hover:bg-opacity-40 hover:scale-[1.02] z-10"
+                                    <div id="hazard-box-{{ $loop->index }}" 
+                                         class="absolute border-2 border-dashed border-red-600 bg-red-500/10 hover:bg-red-500/40 animate-pulse z-20 cursor-help group/hazard"
                                          style="top: {{ $top }}%; left: {{ $left }}%; height: {{ $height }}%; width: {{ $width }}%;"
-                                         onmouseenter="highlightItem({{ $index }})"
-                                         onmouseleave="resetItem({{ $index }})">
+                                         onmouseenter="highlightHazard({{ $loop->index }})"
+                                         onmouseleave="resetHazard({{ $loop->index }})">
                                         
-                                        <!-- Simple Number Label -->
-                                        <span class="absolute top-0 left-0 {{ $typeColor }} text-white text-[10px] font-bold px-1.5 py-0.5 rounded-br-md shadow-sm">
-                                            {{ $loop->iteration }}
-                                        </span>
+                                        <!-- Warning Icon -->
+                                        <div class="absolute -top-2.5 -left-2.5 bg-red-600 text-white rounded-full p-1 shadow-md">
+                                            <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                        </div>
                                     </div>
                                 @endforeach
+                            @endif
+
+                            <!-- Inventory Placements -->
+                            @foreach($recommendations as $rec)
+                                @php
+                                    // Parse Reasoning for styling
+                                    $reasoning = strtolower($rec['reasoning']);
+                                    $borderColor = 'border-green-500';
+                                    $bgColor = 'bg-green-500/20';
+                                    $typeColor = 'bg-green-500';
+                                    
+                                    if (str_contains($reasoning, 'heavy') || str_contains($reasoning, 'bottom') || str_contains($reasoning, 'floor') || ($rec['type'] ?? '') === 'heavy') {
+                                        $borderColor = 'border-red-500';
+                                        $bgColor = 'bg-red-500/20';
+                                        $typeColor = 'bg-red-500';
+                                    } elseif (str_contains($reasoning, 'fragile') || str_contains($reasoning, 'glass') || ($rec['type'] ?? '') === 'fragile') {
+                                        $borderColor = 'border-yellow-400';
+                                        $bgColor = 'bg-yellow-400/20';
+                                        $typeColor = 'bg-yellow-400';
+                                    }
+                                    
+                                    // Coordinates
+                                    $box = $rec['box_2d'];
+                                    $top = ($box[0] / 1000) * 100;
+                                    $left = ($box[1] / 1000) * 100;
+                                    $height = (($box[2] - $box[0]) / 1000) * 100;
+                                    $width = (($box[3] - $box[1]) / 1000) * 100;
+                                @endphp
+
+                                <div id="box-{{ $loop->index }}" 
+                                     class="absolute border-2 {{ $borderColor }} {{ $bgColor }} transition-all duration-200 cursor-pointer hover:bg-opacity-40 hover:scale-[1.02] z-10"
+                                     style="top: {{ $top }}%; left: {{ $left }}%; height: {{ $height }}%; width: {{ $width }}%;"
+                                     onmouseenter="highlightItem({{ $loop->index }})"
+                                     onmouseleave="resetItem({{ $loop->index }})">
+                                    
+                                    <!-- Simple Number Label -->
+                                    <span class="absolute top-0 left-0 {{ $typeColor }} text-white text-[10px] font-bold px-1.5 py-0.5 rounded-br-md shadow-sm">
+                                        {{ $loop->iteration }}
+                                    </span>
+                                </div>
+                            @endforeach
                             </div>
                         @else
                             <div class="text-center text-slate-400">
@@ -189,11 +218,46 @@
                     </div>
 
                     <!-- Details List Area (Bottom Half) -->
-                    <div class="h-1/2 bg-white border-t border-slate-200 flex flex-col">
-                        <div class="p-3 bg-slate-50 border-b border-slate-200 text-xs font-semibold text-slate-500 uppercase tracking-wider">
-                            Recommendation Details
-                        </div>
+                    <div class="h-1/2 bg-white border-t border-slate-200 flex flex-col overflow-hidden">
                         <div class="overflow-y-auto flex-grow p-0 scroll-smooth" id="itemsList">
+                            
+                            <!-- Section: Safety Audit -->
+                            @if(isset($hazards) && count($hazards) > 0)
+                                <div class="p-3 bg-red-50 border-b border-red-100 text-[10px] font-bold text-red-600 uppercase tracking-widest flex items-center">
+                                    <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
+                                    Safety Audit Findings
+                                </div>
+                                <ul class="divide-y divide-red-50 bg-red-50/30">
+                                    @foreach($hazards as $index => $haz)
+                                        <li id="hazard-item-{{ $index }}" 
+                                            class="p-4 hover:bg-red-100 transition-colors cursor-pointer border-l-4 border-transparent"
+                                            onmouseenter="highlightHazardBox({{ $index }})"
+                                            onmouseleave="resetHazardBox({{ $index }})">
+                                            <div class="flex items-start space-x-3">
+                                                <div class="flex-shrink-0 w-6 h-6 rounded bg-red-600 text-white flex items-center justify-center text-[10px] font-bold">
+                                                    !
+                                                </div>
+                                                <div class="flex-1 min-w-0">
+                                                    <div class="flex items-center justify-between mb-0.5">
+                                                        <p class="text-xs font-bold text-red-900 uppercase">
+                                                            {{ $haz['severity'] }} Severity
+                                                        </p>
+                                                    </div>
+                                                    <p class="text-sm text-red-800 leading-relaxed">
+                                                        {{ $haz['description'] }}
+                                                    </p>
+                                                </div>
+                                            </div>
+                                        </li>
+                                    @endforeach
+                                </ul>
+                            @endif
+
+                            <div class="p-3 bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center">
+                                <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01"></path></svg>
+                                Placement Recommendations
+                            </div>
+                            
                             @if(isset($recommendations))
                                 <ul class="divide-y divide-slate-100">
                                     @foreach($recommendations as $index => $rec)
@@ -246,18 +310,16 @@
             </div>
 
             <script>
-                // Bidirectional Highlighting Logic
+                // Bidirectional Highlighting Logic for Items
                 function highlightItem(index) {
-                    // Highlight List Item
                     const item = document.getElementById('item-' + index);
                     if (item) {
                         item.classList.add('bg-indigo-50', 'border-indigo-500');
                         item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
                     }
-                    // Highlight Box
                     const box = document.getElementById('box-' + index);
                     if (box) {
-                        box.classList.add('z-50', 'ring-4', 'ring-indigo-400'); // Bring to front
+                        box.classList.add('z-50', 'ring-4', 'ring-indigo-400');
                     }
                 }
 
@@ -272,13 +334,37 @@
                     }
                 }
 
-                function highlightBox(index) {
-                    highlightItem(index); // Reuse same logic
+                function highlightBox(index) { highlightItem(index); }
+                function resetBox(index) { resetItem(index); }
+
+                // Bidirectional Highlighting Logic for Hazards
+                function highlightHazard(index) {
+                    const item = document.getElementById('hazard-item-' + index);
+                    if (item) {
+                        item.classList.add('bg-red-200', 'border-red-600');
+                        item.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                    const box = document.getElementById('hazard-box-' + index);
+                    if (box) {
+                        box.classList.add('z-50', 'ring-4', 'ring-red-400', 'animate-none');
+                        box.classList.remove('animate-pulse');
+                    }
                 }
 
-                function resetBox(index) {
-                    resetItem(index); // Reuse same logic
+                function resetHazard(index) {
+                    const item = document.getElementById('hazard-item-' + index);
+                    if (item) {
+                        item.classList.remove('bg-red-200', 'border-red-600');
+                    }
+                    const box = document.getElementById('hazard-box-' + index);
+                    if (box) {
+                        box.classList.remove('z-50', 'ring-4', 'ring-red-400', 'animate-none');
+                        box.classList.add('animate-pulse');
+                    }
                 }
+
+                function highlightHazardBox(index) { highlightHazard(index); }
+                function resetHazardBox(index) { resetHazard(index); }
             </script>
 
         </div>
@@ -304,15 +390,16 @@
             btn.disabled = true;
 
             try {
-                // 1. Get Visual Source (Image + Boxes)
-                // We clone the wrapper that holds both the img and the absolute div overlays
+                // 1. Get Visual Source
                 const sourceVisual = document.querySelector('.relative.inline-block');
                 if (!sourceVisual) throw new Error("No visual analysis found");
                 
-                const listItems = document.querySelectorAll('#itemsList li');
-                const itemCount = listItems.length;
+                // 2. Separate Data Sources
+                const hazardItems = document.querySelectorAll('li[id^="hazard-item-"]');
+                const placementItems = document.querySelectorAll('li[id^="item-"]');
+                const totalItems = hazardItems.length + placementItems.length;
 
-                // 2. Create Dedicated Print Container
+                // 3. Create Dedicated Print Container
                 const printContainer = document.createElement('div');
                 Object.assign(printContainer.style, {
                     position: 'absolute',
@@ -324,57 +411,95 @@
                     color: '#1e293b'
                 });
                 
-                // 3. Build HTML Content
-                let listHtml = '';
-                listItems.forEach((item, index) => {
-                   // Fix: Specific selectors to avoid grabbing the number badge
-                   const titleEl = item.querySelector('p.text-slate-900');
-                   const descEl = item.querySelector('p.text-slate-600');
-                   const badgeEl = item.querySelector('.inline-flex');
+                // 4. Build Hazards HTML
+                let hazardsHtml = '';
+                if (hazardItems.length > 0) {
+                    let hazardListInner = '';
+                    hazardItems.forEach((item, index) => {
+                        const severityEl = item.querySelector('.text-red-900');
+                        const descEl = item.querySelector('.text-red-800');
+                        
+                        const severity = severityEl ? severityEl.innerText : 'HAZARD';
+                        const desc = descEl ? descEl.innerText : '';
 
-                   // Fallbacks
-                   const rawText = titleEl ? titleEl.innerText : 'Unknown Item';
-                   // Split icon if present
-                   const iconMatch = rawText.match(/^(\P{L}+)\s+(.*)/u); // Match emoji/symbol at start
-                   const icon = iconMatch ? iconMatch[1] : '📦';
-                   const title = iconMatch ? iconMatch[2] : rawText;
-                   
-                   const desc = descEl ? descEl.innerText : '';
-                   const badgeText = badgeEl ? badgeEl.innerText : 'Standard';
+                        hazardListInner += `
+                            <div style="padding: 12px 20px; border-bottom: 1px solid #fee2e2; page-break-inside: avoid; display: flex; align-items: flex-start;">
+                                <div style="width: 24px; height: 24px; background-color: #dc2626; border-radius: 4px; display: flex; align-items: center; justify-content: center; margin-right: 15px; flex-shrink: 0; color: white; font-weight: bold; font-size: 14px;">!</div>
+                                <div>
+                                    <div style="font-size: 11px; font-weight: 800; color: #991b1b; text-transform: uppercase; margin-bottom: 2px;">${severity}</div>
+                                    <p style="font-size: 12px; color: #7f1d1d; margin: 0; line-height: 1.4;">${desc}</p>
+                                </div>
+                            </div>
+                        `;
+                    });
 
-                   // Styling
-                   let badgeColor = '#22c55e'; 
-                   let badgeBg = '#dcfce7';
-                   let borderColor = '#f1f5f9';
+                    hazardsHtml = `
+                        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 10px; margin-top: 30px; color: #dc2626; text-transform: uppercase; display: flex; align-items: center;">
+                            <span style="display: inline-block; width: 8px; height: 8px; background-color: #dc2626; border-radius: 50%; margin-right: 8px;"></span>
+                            Safety Audit Findings
+                        </h3>
+                        <div style="border: 1px solid #fecaca; border-radius: 12px; background-color: #fef2f2; overflow: hidden; margin-bottom: 10px;">
+                            ${hazardListInner}
+                        </div>
+                    `;
+                }
 
-                   if(badgeText.toLowerCase().includes('heavy')) {
-                       badgeColor = '#ef4444'; badgeBg = '#fee2e2';
-                   } else if(badgeText.toLowerCase().includes('fragile')) {
-                       badgeColor = '#eab308'; badgeBg = '#fef9c3';
-                   }
+                // 5. Build Placements HTML
+                let placementsHtml = '';
+                if (placementItems.length > 0) {
+                    let placementListInner = '';
+                    placementItems.forEach((item, index) => {
+                       const titleEl = item.querySelector('p.text-slate-900');
+                       const descEl = item.querySelector('p.text-slate-600');
+                       const badgeEl = item.querySelector('.inline-flex');
 
-                   listHtml += `
-                       <div style="padding: 15px 20px; border-bottom: 1px solid ${borderColor}; page-break-inside: avoid;">
-                           <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
-                               <div style="display: flex; align-items: center;">
-                                   <!-- Number Badge -->
-                                   <div style="width: 24px; height: 24px; background-color: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #64748b; margin-right: 12px; flex-shrink: 0;">
-                                       ${index + 1}
+                       const rawText = titleEl ? titleEl.innerText : 'Unknown Item';
+                       const iconMatch = rawText.match(/^(\P{L}+)\s+(.*)/u);
+                       const icon = iconMatch ? iconMatch[1] : '📦';
+                       const title = iconMatch ? iconMatch[2] : rawText;
+                       
+                       const desc = descEl ? descEl.innerText : '';
+                       const badgeText = badgeEl ? badgeEl.innerText : 'Standard';
+
+                       let badgeColor = '#22c55e'; 
+                       let badgeBg = '#dcfce7';
+
+                       if(badgeText.toLowerCase().includes('heavy')) {
+                           badgeColor = '#ef4444'; badgeBg = '#fee2e2';
+                       } else if(badgeText.toLowerCase().includes('fragile')) {
+                           badgeColor = '#eab308'; badgeBg = '#fef9c3';
+                       }
+
+                       placementListInner += `
+                           <div style="padding: 15px 20px; border-bottom: 1px solid #f1f5f9; page-break-inside: avoid;">
+                               <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 5px;">
+                                   <div style="display: flex; align-items: center;">
+                                       <div style="width: 24px; height: 24px; background-color: #f1f5f9; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800; color: #64748b; margin-right: 12px; flex-shrink: 0;">
+                                           ${index + 1}
+                                       </div>
+                                       <span style="font-size: 18px; margin-right: 10px;">${icon}</span>
+                                       <span style="font-weight: 700; font-size: 14px; color: #0f172a;">${title}</span>
                                    </div>
-                                   <span style="font-size: 18px; margin-right: 10px;">${icon}</span>
-                                   <span style="font-weight: 700; font-size: 14px; color: #0f172a;">${title}</span>
+                                   <span style="background-color: ${badgeBg}; color: ${badgeColor}; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase;">${badgeText}</span>
                                </div>
-                               <span style="background-color: ${badgeBg}; color: ${badgeColor}; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase;">${badgeText}</span>
+                               <p style="font-size: 12px; color: #64748b; margin: 0; padding-left: 66px;">${desc}</p>
                            </div>
-                           <!-- Added padding-left to align desc with title (24px badge + 12px margin + 28px icon space approx) -->
-                           <p style="font-size: 12px; color: #64748b; margin: 0; padding-left: 66px;">${desc}</p>
-                       </div>
-                   `;
-                });
+                       `;
+                    });
 
-                // Clone the visual part specifically for the PDF
+                    placementsHtml = `
+                        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 10px; margin-top: 30px; color: #334155; text-transform: uppercase; display: flex; align-items: center;">
+                            <span style="display: inline-block; width: 8px; height: 8px; background-color: #3b82f6; border-radius: 50%; margin-right: 8px;"></span>
+                            Placement Recommendations
+                        </h3>
+                        <div style="border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
+                            ${placementListInner}
+                        </div>
+                    `;
+                }
+
+                // 6. Clone Visual
                 const visualClone = sourceVisual.cloneNode(true);
-                // Force styling on the clone to ensure it looks right on A4
                 visualClone.classList.remove('w-full', 'h-auto', 'shadow-2xl');
                 Object.assign(visualClone.style, {
                     width: '100%',
@@ -385,16 +510,21 @@
                     display: 'block'
                 });
                 
-                // Ensure boxes in the clone are visible
+                // Fix overlay styles in clone
                 const boxes = visualClone.querySelectorAll('div.absolute');
                 boxes.forEach(box => {
-                    box.style.borderWidth = '2px'; // Ensure border is thick enough
-                    // Make sure hover effects don't hide things (though they shouldn't trigger here)
-                    box.style.opacity = '1'; 
+                    box.style.borderWidth = '2px';
+                    box.style.opacity = '1';
+                    // Remove animation classes from clone to static PDF
+                    box.classList.remove('animate-pulse'); 
+                    // Ensure dashed borders for hazards are visible
+                    if(box.classList.contains('border-dashed')) {
+                        box.style.borderStyle = 'dashed';
+                    }
                 });
 
-                // Construct DOM
-                const headerHtml = `
+                // 7. Construct Final DOM
+                printContainer.innerHTML = `
                     <div style="padding: 40px;">
                         <div style="border-bottom: 2px solid #4f46e5; padding-bottom: 20px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: flex-end;">
                             <div>
@@ -402,25 +532,25 @@
                                 <p style="font-size: 12px; color: #64748b; margin-top: 5px;">Generated on ${new Date().toLocaleDateString()}</p>
                             </div>
                             <div style="text-align: right;">
-                                <div style="font-size: 32px; font-weight: 800; color: #4f46e5; line-height: 1;">${itemCount}</div>
-                                <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; color: #94a3b8;">Items</div>
+                                <div style="font-size: 32px; font-weight: 800; color: #4f46e5; line-height: 1;">${totalItems}</div>
+                                <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; color: #94a3b8;">Total Items</div>
                             </div>
                         </div>
-                        <div id="pdf-visual-container" style="margin-bottom: 30px;"></div>
-                        <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 15px; color: #334155; text-transform: uppercase;">Placement Recommendations</h3>
-                        <div style="border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
-                            ${listHtml}
+                        
+                        <div id="pdf-visual-container" style="margin-bottom: 20px;"></div>
+                        
+                        ${hazardsHtml}
+                        ${placementsHtml}
+
+                        <div style="margin-top: 40px; padding-top: 20px; border-top: 1px solid #e2e8f0; text-align: center;">
+                            <p style="font-size: 10px; color: #94a3b8;">LogiVision AI - Smart Inventory Placement System</p>
                         </div>
                     </div>
                 `;
                 
-                printContainer.innerHTML = headerHtml;
                 document.body.appendChild(printContainer);
-                
-                // Inject the visual clone into the correct spot
                 document.querySelector('#pdf-visual-container').appendChild(visualClone);
 
-                // Wait for render
                 await new Promise(resolve => setTimeout(resolve, 800));
 
                 const canvas = await html2canvas(printContainer, {
@@ -434,7 +564,6 @@
                 const pdf = new jsPDF('p', 'mm', 'a4');
                 const pdfWidth = 210; 
                 const pdfHeight = 297; 
-                
                 const imgProps = pdf.getImageProperties(imgData);
                 const imgHeight = (imgProps.height * pdfWidth) / imgProps.width;
                 

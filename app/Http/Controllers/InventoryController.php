@@ -35,30 +35,36 @@ class InventoryController extends Controller
                 Analyze the provided image (a room or storage space) and the following inventory list: 
                 '{$request->inventory_list}'.
                 
-                For each item in the list, determine the best placement in the image.
-                Consider physics and logic: Heavy items go on the bottom/floor. Fragile items go on top or secure areas.
-                
+                Task 1: Determine the best placement for the inventory items based on physics and logic (Heavy=bottom, Fragile=top).
+                Task 2: Safety Audit. Identify potential safety hazards in the current room setup (e.g., liquids near electronics, blocked exits, precarious stacking, trip hazards).
+
                 Output PURE JSON with this schema:
                 {
-                    \"recommendations\": [
+                    \"placements\": [
                         {
                             \"item_name\": \"Name of item\",
                             \"box_2d\": [ymin, xmin, ymax, xmax], // Scale 0 to 1000
-                            \"reasoning\": \"Why this spot? (e.g. Heavy item on floor)\",
+                            \"reasoning\": \"Why this spot?\",
                             \"type\": \"heavy|fragile|normal\"
+                        }
+                    ],
+                    \"hazards\": [
+                        {
+                            \"description\": \"Description of the hazard\",
+                            \"severity\": \"High|Medium\",
+                            \"box_2d\": [ymin, xmin, ymax, xmax] // Scale 0 to 1000 location of the hazard
                         }
                     ]
                 }
             ";
 
-            $response = Http::timeout(90) // 90 detik
-            ->withHeaders([
+            $response = Http::withHeaders([
                 'Content-Type' => 'application/json',
                 'x-goog-api-key' => $apiKey,
             ])->post($apiUrl, [
                 'system_instruction' => [
                     'parts' => [
-                        ['text' => "You are LogiVision, an expert logistics AI. You output strictly JSON."]
+                        ['text' => "You are LogiVision, an expert logistics AI and Safety Auditor. You output strictly JSON."]
                     ]
                 ],
                 'contents' => [
@@ -88,12 +94,13 @@ class InventoryController extends Controller
             
             // Parse the JSON content from the candidate
             $textResponse = $responseData['candidates'][0]['content']['parts'][0]['text'] ?? '{}';
-            $recommendations = json_decode($textResponse, true);
+            $parsedData = json_decode($textResponse, true);
 
             return view('welcome', [
                 'image' => $imageData,
                 'mime_type' => $mimeType,
-                'recommendations' => $recommendations['recommendations'] ?? [],
+                'recommendations' => $parsedData['placements'] ?? [], // Map 'placements' to 'recommendations' to keep view compatible
+                'hazards' => $parsedData['hazards'] ?? [],
                 'inventory_list' => $request->inventory_list
             ]);
 
