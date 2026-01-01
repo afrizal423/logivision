@@ -289,6 +289,19 @@
                                                 $icon = '💎';
                                                 $badgeClass = 'bg-yellow-100 text-yellow-800';
                                             }
+
+                                            // Utilization Score Logic
+                                            $score = $rec['utilization_score'] ?? 0;
+                                            $barColor = 'bg-green-500';
+                                            $textColor = 'text-green-600';
+                                            
+                                            if ($score >= 80) {
+                                                $barColor = 'bg-red-500';
+                                                $textColor = 'text-red-600';
+                                            } elseif ($score >= 50) {
+                                                $barColor = 'bg-yellow-400';
+                                                $textColor = 'text-yellow-600';
+                                            }
                                         @endphp
                                         <li id="item-{{ $index }}" 
                                             class="p-4 hover:bg-slate-50 transition-colors cursor-pointer border-l-4 border-transparent"
@@ -307,6 +320,16 @@
                                                             {{ ucwords($rec['type'] ?? 'Standard') }}
                                                         </span>
                                                     </div>
+                                                    
+                                                    <!-- Space Utilization Bar -->
+                                                    <div class="flex items-center space-x-2 mb-2 mt-1">
+                                                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Density</span>
+                                                        <div class="flex-grow h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                                                            <div class="h-full rounded-full {{ $barColor }}" style="width: {{ $score }}%"></div>
+                                                        </div>
+                                                        <span class="text-[10px] font-bold {{ $textColor }} density-score">{{ $score }}%</span>
+                                                    </div>
+
                                                     <p class="text-sm text-slate-600 line-clamp-2">
                                                         {{ $rec['reasoning'] }}
                                                     </p>
@@ -500,6 +523,7 @@
                        const titleEl = item.querySelector('p.text-slate-900');
                        const descEl = item.querySelector('p.text-slate-600');
                        const badgeEl = item.querySelector('.inline-flex');
+                       const scoreEl = item.querySelector('.density-score'); // Updated specific selector
 
                        const rawText = titleEl ? titleEl.innerText : 'Unknown Item';
                        const iconMatch = rawText.match(/^(\P{L}+)\s+(.*)/u);
@@ -508,15 +532,20 @@
                        
                        const desc = descEl ? descEl.innerText : '';
                        const badgeText = badgeEl ? badgeEl.innerText : 'Standard';
+                       const score = scoreEl ? parseInt(scoreEl.innerText) : 0;
 
                        let badgeColor = '#22c55e'; 
                        let badgeBg = '#dcfce7';
+                       let scoreColor = '#22c55e'; // Green
 
                        if(badgeText.toLowerCase().includes('heavy')) {
                            badgeColor = '#ef4444'; badgeBg = '#fee2e2';
                        } else if(badgeText.toLowerCase().includes('fragile')) {
                            badgeColor = '#eab308'; badgeBg = '#fef9c3';
                        }
+
+                       if (score >= 80) scoreColor = '#ef4444';
+                       else if (score >= 50) scoreColor = '#eab308';
 
                        placementListInner += `
                            <div style="padding: 15px 20px; border-bottom: 1px solid #f1f5f9; page-break-inside: avoid;">
@@ -530,6 +559,16 @@
                                    </div>
                                    <span style="background-color: ${badgeBg}; color: ${badgeColor}; padding: 4px 10px; border-radius: 6px; font-size: 10px; font-weight: 700; text-transform: uppercase;">${badgeText}</span>
                                </div>
+
+                               <!-- PDF Density Bar -->
+                               <div style="display: flex; align-items: center; margin-left: 66px; margin-bottom: 8px; margin-top: 2px;">
+                                   <span style="font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-right: 10px;">Density</span>
+                                   <div style="flex-grow: 1; height: 5px; background-color: #f1f5f9; border-radius: 10px; overflow: hidden; max-width: 150px;">
+                                       <div style="height: 100%; width: ${score}%; background-color: ${scoreColor}; border-radius: 10px;"></div>
+                                   </div>
+                                   <span style="font-size: 10px; font-weight: 800; color: ${scoreColor}; margin-left: 8px;">${score}%</span>
+                               </div>
+
                                <p style="font-size: 12px; color: #64748b; margin: 0; padding-left: 66px;">${desc}</p>
                            </div>
                        `;

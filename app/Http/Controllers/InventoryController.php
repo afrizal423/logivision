@@ -45,7 +45,8 @@ class InventoryController extends Controller
                             \"item_name\": \"Name of item\",
                             \"box_2d\": [ymin, xmin, ymax, xmax], // Scale 0 to 1000
                             \"reasoning\": \"Why this spot?\",
-                            \"type\": \"heavy|fragile|normal\"
+                            \"type\": \"heavy|fragile|normal\",
+                            \"utilization_score\": 50 // Integer 0-100. Estimate percentage fullness of this specific shelf/area AFTER placing this item.
                         }
                     ],
                     \"hazards\": [
