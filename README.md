@@ -6,6 +6,8 @@ LogiVision is an AI-powered logistics assistant designed for Hackathons. It help
 
 ## 🚀 Key Features
 
+- **Modern Landing Page**: A professional SaaS-style introduction page with feature highlights and a clear call-to-action.
+- **Adaptive Image Rendering**: Smart aspect-ratio handling ensures portrait and landscape images are displayed correctly without distortion in both web and PDF views.
 - **AI Room Analysis**: Automatically detects suitable placement spots for items in a room photo.
 - **AI Safety Auditor (K3)**: 
     - Automatically detects potential hazards (e.g., blocked exits, liquids near electronics, precarious stacking).
@@ -58,8 +60,10 @@ LogiVision is an AI-powered logistics assistant designed for Hackathons. It help
 
 ## 💡 Usage
 
-1. **Upload**: Take a photo of your storage space.
-2. **List**: Type your inventory items.
-3. **Analyze**: AI will suggest placements, score space density, and flag safety hazards.
-4. **Search**: Use the "Find My Item" bar to locate specific goods instantly.
-5. **Export**: Download the official PDF report for offline field use.
+1. **Start**: Visit the landing page to learn about the features.
+2. **Launch App**: Click "Try Demo Now" to enter the main application.
+3. **Upload**: Take a photo of your storage space.
+4. **List**: Type your inventory items.
+5. **Analyze**: AI will suggest placements, score space density, and flag safety hazards.
+6. **Search**: Use the "Find My Item" bar to locate specific goods instantly.
+7. **Export**: Download the official PDF report for offline field use.
