@@ -155,8 +155,8 @@
                     <!-- Image Area (Top Half) -->
                     <div class="flex-grow bg-slate-100 relative overflow-hidden flex items-center justify-center p-4">
                         @if(isset($image))
-                            <div class="relative inline-block w-full h-auto max-h-[400px] shadow-lg rounded-lg overflow-hidden group">
-                                <img src="data:{{ $mime_type }};base64,{{ $image }}" class="w-full h-full object-contain block bg-slate-200" alt="Room Analysis">
+                            <div class="relative inline-block max-w-full h-auto shadow-lg rounded-lg overflow-hidden group">
+                                <img src="data:{{ $mime_type }};base64,{{ $image }}" class="block w-auto h-auto max-h-[600px] bg-slate-200" style="max-width: 100%;" alt="Room Analysis">
                                 
                             <!-- Overlays -->
                             
@@ -594,8 +594,18 @@
                     borderRadius: '12px',
                     overflow: 'hidden',
                     border: '1px solid #e2e8f0',
-                    display: 'block'
+                    display: 'block',
+                    maxHeight: 'none'
                 });
+
+                // Reset Image Styles for PDF
+                const cloneImg = visualClone.querySelector('img');
+                if(cloneImg) {
+                    cloneImg.style.width = '100%';
+                    cloneImg.style.height = 'auto';
+                    cloneImg.style.maxHeight = 'none';
+                    cloneImg.classList.remove('max-h-[600px]', 'w-auto');
+                }
                 
                 // Fix overlay styles in clone
                 const boxes = visualClone.querySelectorAll('div.absolute');
