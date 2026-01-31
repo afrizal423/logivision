@@ -1,0 +1,310 @@
+const translations = {
+    "en": {
+        "nav_features": "Features",
+        "nav_how_it_works": "How it Works",
+        "nav_try_demo": "Try Demo Now",
+        "hero_title": "Optimize Your Warehouse Space with",
+        "hero_ai": "AI Intelligence",
+        "hero_desc": "Stop guessing where to put inventory. LogiVision uses Gemini 3 to analyze safety, maximize capacity, and organize your storage in seconds.",
+        "hero_cta": "Start Optimizing",
+        "efficiency": "Efficiency",
+        "space_plus": "+35% Space",
+        "core_capabilities": "Core Capabilities",
+        "everything_organize": "Everything you need to organize",
+        "smart_layout": "Smart Spatial Layout",
+        "smart_layout_desc": "AI suggests the perfect bounding box for every item based on size, fragility, and access frequency optimization.",
+        "safety_audit": "Safety First Audit",
+        "safety_audit_desc": "Automatically detects hazards like liquids near electronics, blocked exits, or heavy items on top shelves.",
+        "utilization_score": "Utilization Score",
+        "utilization_desc": "Know exactly how much space you have left with real-time capacity estimation and density visualization.",
+        "how_it_works_title": "How It Works",
+        "how_it_works_subtitle": "Three simple steps to a better warehouse",
+        "step_1_title": "Upload Data",
+        "step_1_desc": "Take a photo of your storage space and input your inventory list text.",
+        "step_2_title": "AI Analysis",
+        "step_2_desc": "Gemini 3 Vision maps the 3D space, identifies hazards, and calculates fit.",
+        "step_3_title": "Visual Result",
+        "step_3_desc": "Get a clear overlay guide and PDF report on exactly where to place items.",
+        "start_first_scan": "Start Your First Scan",
+        "footer_hackathon": "Created for the Hackathon.",
+        "input_data": "Input Data",
+        "inventory_list": "Inventory List",
+        "room_image": "Room Image",
+        "upload_file": "Upload a file",
+        "drag_drop": "or drag and drop",
+        "file_limit": "PNG, JPG, GIF up to 10MB",
+        "analyze_layout": "Analyze Layout",
+        "analyzing": "Analyzing...",
+        "visual_analysis": "Visual Analysis",
+        "export_pdf": "Export PDF",
+        "items_count": "Items",
+        "find_item": "Find item by name...",
+        "no_analysis": "No analysis yet",
+        "safety_audit_findings": "Safety Audit Findings",
+        "placement_recommendations": "Placement Recommendations",
+        "density": "Density",
+        "standard": "Standard",
+        "heavy": "Heavy",
+        "fragile": "Fragile",
+        "upload_to_see": "Upload data to see breakdown here.",
+        "generating": "Generating...",
+        "no_visual_found": "No visual analysis found",
+        "example_text": "Example:\n- 5 large boxes of books (Heavy)\n- 1 glass vase (Fragile)\n- 2 bags of clothes"
+    },
+    "id": {
+        "nav_features": "Fitur",
+        "nav_how_it_works": "Cara Kerja",
+        "nav_try_demo": "Coba Demo Sekarang",
+        "hero_title": "Optimalkan Ruang Gudang Anda dengan",
+        "hero_ai": "Kecerdasan AI",
+        "hero_desc": "Berhenti menebak tempat menaruh inventaris. LogiVision menggunakan Gemini 3 untuk menganalisis keamanan, memaksimalkan kapasitas, dan mengatur penyimpanan Anda dalam hitungan detik.",
+        "hero_cta": "Mulai Optimasi",
+        "efficiency": "Efisiensi",
+        "space_plus": "+35% Ruang",
+        "core_capabilities": "Kemampuan Utama",
+        "everything_organize": "Semua yang Anda butuhkan untuk mengatur",
+        "smart_layout": "Tata Letak Spasial Pintar",
+        "smart_layout_desc": "AI menyarankan kotak pembatas yang sempurna untuk setiap item berdasarkan ukuran, kerentanan, dan optimasi frekuensi akses.",
+        "safety_audit": "Audit Keamanan Utama",
+        "safety_audit_desc": "Secara otomatis mendeteksi bahaya seperti cairan di dekat elektronik, pintu keluar yang terhalang, atau barang berat di rak atas.",
+        "utilization_score": "Skor Pemanfaatan",
+        "utilization_desc": "Ketahui dengan tepat berapa banyak ruang yang tersisa dengan estimasi kapasitas waktu nyata dan visualisasi kepadatan.",
+        "how_it_works_title": "Cara Kerja",
+        "how_it_works_subtitle": "Tiga langkah sederhana untuk gudang yang lebih baik",
+        "step_1_title": "Unggah Data",
+        "step_1_desc": "Ambil foto ruang penyimpanan Anda dan masukkan teks daftar inventaris Anda.",
+        "step_2_title": "Analisis AI",
+        "step_2_desc": "Gemini 3 Vision memetakan ruang 3D, mengidentifikasi bahaya, dan menghitung kecocokan.",
+        "step_3_title": "Hasil Visual",
+        "step_3_desc": "Dapatkan panduan hamparan yang jelas dan laporan PDF tentang tempat yang tepat untuk menaruh barang.",
+        "start_first_scan": "Mulai Pemindaian Pertama",
+        "footer_hackathon": "Dibuat untuk Hackathon.",
+        "input_data": "Input Data",
+        "inventory_list": "Daftar Inventaris",
+        "room_image": "Gambar Ruangan",
+        "upload_file": "Unggah file",
+        "drag_drop": "atau seret dan lepas",
+        "file_limit": "PNG, JPG, GIF hingga 10MB",
+        "analyze_layout": "Analisis Tata Letak",
+        "analyzing": "Menganalisis...",
+        "visual_analysis": "Analisis Visual",
+        "export_pdf": "Ekspor PDF",
+        "items_count": "Item",
+        "find_item": "Cari item berdasarkan nama...",
+        "no_analysis": "Belum ada analisis",
+        "safety_audit_findings": "Temuan Audit Keamanan",
+        "placement_recommendations": "Rekomendasi Penempatan",
+        "density": "Kepadatan",
+        "standard": "Standar",
+        "heavy": "Berat",
+        "fragile": "Pecah Belah",
+        "upload_to_see": "Unggah data untuk melihat rincian di sini.",
+        "generating": "Menghasilkan...",
+        "no_visual_found": "Analisis visual tidak ditemukan",
+        "example_text": "Contoh:\n- 5 kotak besar buku (Berat)\n- 1 vas kaca (Pecah Belah)\n- 2 tas pakaian"
+    },
+    "ja": {
+        "nav_features": "機能",
+        "nav_how_it_works": "仕組み",
+        "nav_try_demo": "デモを試す",
+        "hero_title": "倉庫スペースを最適化する",
+        "hero_ai": "AIインテリジェンス",
+        "hero_desc": "在庫の置き場所に迷うのはもうやめましょう。LogiVisionはGemini 3を使用して安全性を分析し、容量を最大化し、数秒でストレージを整理します。",
+        "hero_cta": "最適化を開始",
+        "efficiency": "効率",
+        "space_plus": "+35% スペース",
+        "core_capabilities": "主な機能",
+        "everything_organize": "整理に必要なすべて",
+        "smart_layout": "スマートな空間レイアウト",
+        "smart_layout_desc": "AIは、サイズ、壊れやすさ、アクセス頻度の最適化に基づいて、すべてのアイテムに最適なバウンディングボックスを提案します。",
+        "safety_audit": "安全第一の監査",
+        "safety_audit_desc": "電子機器の近くの液体、塞がれた出口、または最上段の重いアイテムなどの危険を自動的に検出します。",
+        "utilization_score": "利用スコア",
+        "utilization_desc": "リアルタイムの容量推定と密度視覚化により、残りのスペースを正確に把握できます。",
+        "how_it_works_title": "仕組み",
+        "how_it_works_subtitle": "より良い倉庫への3つの簡単なステップ",
+        "step_1_title": "データをアップロード",
+        "step_1_desc": "保管スペースの写真を撮り、在庫リストのテキストを入力します。",
+        "step_2_title": "AI分析",
+        "step_2_desc": "Gemini 3 Visionは3D空間をマッピングし、危険を特定し、適合性を計算します。",
+        "step_3_title": "視覚的な結果",
+        "step_3_desc": "アイテムを配置する正確な場所に関する明確なオーバーレイガイドとPDFレポートを取得します。",
+        "start_first_scan": "最初のスキャンを開始",
+        "footer_hackathon": "ハッカソンのために作成されました。",
+        "input_data": "入力データ",
+        "inventory_list": "在庫リスト",
+        "room_image": "部屋の画像",
+        "upload_file": "ファイルをアップロード",
+        "drag_drop": "またはドラッグ＆ドロップ",
+        "file_limit": "PNG, JPG, GIF 最大10MB",
+        "analyze_layout": "レイアウトを分析",
+        "analyzing": "分析中...",
+        "visual_analysis": "視覚分析",
+        "export_pdf": "PDFをエクスポート",
+        "items_count": "アイテム",
+        "find_item": "名前でアイテムを検索...",
+        "no_analysis": "分析はまだありません",
+        "safety_audit_findings": "安全監査の結果",
+        "placement_recommendations": "配置の推奨事項",
+        "density": "密度",
+        "standard": "標準",
+        "heavy": "重量物",
+        "fragile": "壊れ物",
+        "upload_to_see": "データをアップロードして、ここで内訳を確認してください。",
+        "generating": "生成中...",
+        "no_visual_found": "視覚分析が見つかりません",
+        "example_text": "例：\n- 本の大きな箱5つ（重量物）\n- ガラスの花瓶1つ（壊れ物）\n- 衣類のバッグ2つ"
+    },
+    "zh": {
+        "nav_features": "功能",
+        "nav_how_it_works": "工作原理",
+        "nav_try_demo": "立即体验演示",
+        "hero_title": "利用人工智能优化您的仓库空间",
+        "hero_ai": "人工智能",
+        "hero_desc": "不再盲目猜测库存摆放位置。LogiVision 使用 Gemini 3 在几秒钟内分析安全性、最大化容量并整理您的存储空间。",
+        "hero_cta": "开始优化",
+        "efficiency": "效率",
+        "space_plus": "+35% 空间",
+        "core_capabilities": "核心能力",
+        "everything_organize": "整理所需的一切",
+        "smart_layout": "智能空间布局",
+        "smart_layout_desc": "人工智能根据尺寸、易碎性和访问频率优化，为每件物品建议完美的边界框。",
+        "safety_audit": "安全第一审核",
+        "safety_audit_desc": "自动检测危险，如电子设备附近的液体、堵塞的出口或顶层货架上的重物。",
+        "utilization_score": "利用率评分",
+        "utilization_desc": "通过实时容量评估和密度可视化，准确了解剩余空间。",
+        "how_it_works_title": "工作原理",
+        "how_it_works_subtitle": "改善仓库的三个简单步骤",
+        "step_1_title": "上传数据",
+        "step_1_desc": "拍摄存储空间的照片并输入库存清单文本。",
+        "step_2_title": "人工智能分析",
+        "step_2_desc": "Gemini 3 Vision 映射 3D 空间，识别危险并计算匹配度。",
+        "step_3_title": "可视化结果",
+        "step_3_desc": "获取清晰的覆盖指南和关于物品摆放位置的 PDF 报告。",
+        "start_first_scan": "开始首次扫描",
+        "footer_hackathon": "为黑客松创建。",
+        "input_data": "输入数据",
+        "inventory_list": "库存清单",
+        "room_image": "房间图像",
+        "upload_file": "上传文件",
+        "drag_drop": "或拖放",
+        "file_limit": "PNG, JPG, GIF 最大 10MB",
+        "analyze_layout": "分析布局",
+        "analyzing": "正在分析...",
+        "visual_analysis": "视觉分析",
+        "export_pdf": "导出 PDF",
+        "items_count": "物品",
+        "find_item": "按名称查找物品...",
+        "no_analysis": "尚无分析",
+        "safety_audit_findings": "安全审核结果",
+        "placement_recommendations": "摆放建议",
+        "density": "密度",
+        "standard": "标准",
+        "heavy": "重物",
+        "fragile": "易碎品",
+        "upload_to_see": "上传数据以在此处查看详细细目。",
+        "generating": "正在生成...",
+        "no_visual_found": "未找到视觉分析",
+        "example_text": "示例：\n- 5 大箱书（重物）\n- 1 个玻璃花瓶（易碎品）\n- 2 袋衣服"
+    },
+    "es": {
+        "nav_features": "Características",
+        "nav_how_it_works": "Cómo funciona",
+        "nav_try_demo": "Probar demo ahora",
+        "hero_title": "Optimice su espacio de almacén con",
+        "hero_ai": "Inteligencia Artificial",
+        "hero_desc": "Deje de adivinar dónde colocar el inventario. LogiVision utiliza Gemini 3 para analizar la seguridad, maximizar la capacidad y organizar su almacenamiento en segundos。",
+        "hero_cta": "Empezar a optimizar",
+        "efficiency": "Eficiencia",
+        "space_plus": "+35% de espacio",
+        "core_capabilities": "Capacidades principales",
+        "everything_organize": "Todo lo que necesita para organizar",
+        "smart_layout": "Diseño espacial inteligente",
+        "smart_layout_desc": "La IA sugiere el cuadro delimitador perfecto para cada artículo según el tamaño, la fragilidad y la optimización de la frecuencia de acceso。",
+        "safety_audit": "Auditoría de seguridad primero",
+        "safety_audit_desc": "Detecta automáticamente peligros como líquidos cerca de dispositivos electrónicos, salidas bloqueadas o artículos pesados en estantes superiores。",
+        "utilization_score": "Puntuación de utilización",
+        "utilization_desc": "Sepa exactamente cuánto espacio le queda con la estimación de capacidad en tiempo real y la visualización de densidad。",
+        "how_it_works_title": "Cómo funciona",
+        "how_it_works_subtitle": "Tres sencillos pasos para un mejor almacén",
+        "step_1_title": "Cargar datos",
+        "step_1_desc": "Tome una foto de su espacio de almacenamiento e ingrese el texto de su lista de inventario。",
+        "step_2_title": "Análisis de IA",
+        "step_2_desc": "Gemini 3 Vision mapea el espacio 3D, identifica peligros y calcula el ajuste。",
+        "step_3_title": "Resultado visual",
+        "step_3_desc": "Obtenga una guía de superposición clara y un informe en PDF sobre exactamente dónde colocar los artículos。",
+        "start_first_scan": "Comience su primer escaneo",
+        "footer_hackathon": "Creado para el Hackathon。",
+        "input_data": "Datos de entrada",
+        "inventory_list": "Lista de inventario",
+        "room_image": "Imagen de la habitación",
+        "upload_file": "Cargar un archivo",
+        "drag_drop": "o arrastrar y soltar",
+        "file_limit": "PNG, JPG, GIF hasta 10MB",
+        "analyze_layout": "Analizar diseño",
+        "analyzing": "Analizando...",
+        "visual_analysis": "Análisis visual",
+        "export_pdf": "Exportar PDF",
+        "items_count": "Artículos",
+        "find_item": "Buscar artículo por nombre...",
+        "no_analysis": "Aún no hay análisis",
+        "safety_audit_findings": "Hallazgos de la auditoría de seguridad",
+        "placement_recommendations": "Recomendaciones de colocación",
+        "density": "Densidad",
+        "standard": "Estándar",
+        "heavy": "Pesado",
+        "fragile": "Frágil",
+        "upload_to_see": "Cargue datos para ver el desglose aquí。",
+        "generating": "Generando...",
+        "no_visual_found": "No se encontró análisis visual",
+        "example_text": "Ejemplo:\n- 5 cajas grandes de libros (Pesado)\n- 1 jarrón de cristal (Frágil)\n- 2 bolsas de ropa"
+    }
+};
+
+function setLanguage(lang) {
+    localStorage.setItem('logivision_lang', lang);
+    applyTranslations(lang);
+    
+    // Update hidden language input if it exists
+    const langInput = document.getElementById('selected_lang');
+    if (langInput) {
+        langInput.value = lang;
+    }
+
+    // Special case for inventory list placeholder
+    const inventoryTextarea = document.getElementById('inventory_list');
+    if (inventoryTextarea && translations[lang].example_text) {
+        inventoryTextarea.placeholder = translations[lang].example_text;
+    }
+}
+
+function applyTranslations(lang) {
+    const langData = translations[lang];
+    if (!langData) return;
+
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (langData[key]) {
+            if (el.tagName === 'INPUT' || el.tagName === 'TEXTAREA') {
+                el.placeholder = langData[key];
+            } else {
+                el.textContent = langData[key];
+            }
+        }
+    });
+
+    // Update HTML lang attribute
+    document.documentElement.lang = lang;
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    const savedLang = localStorage.getItem('logivision_lang') || 'en';
+    
+    // Set initial value for select if exists
+    const langSelect = document.getElementById('lang_select');
+    if (langSelect) {
+        langSelect.value = savedLang;
+    }
+
+    setLanguage(savedLang);
+});

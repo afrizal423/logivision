@@ -41,8 +41,18 @@
                     <a href="{{ route('landing') }}">LogiVision <span class="text-slate-400 font-light">AI</span></a>
                 </h1>
             </div>
-            <div class="text-sm font-medium text-slate-500">
-                Hackathon Build v1.0
+            
+            <div class="flex items-center space-x-6">
+                <select id="lang_select" onchange="setLanguage(this.value)" class="text-sm font-medium text-slate-500 bg-transparent border-none focus:ring-0 cursor-pointer outline-none">
+                    <option value="en">English (US)</option>
+                    <option value="id">Indonesia</option>
+                    <option value="ja">日本語</option>
+                    <option value="zh">中文</option>
+                    <option value="es">Español</option>
+                </select>
+                <div class="text-sm font-medium text-slate-500 hidden md:block">
+                    Hackathon Build v1.0
+                </div>
             </div>
         </div>
     </header>
@@ -70,16 +80,17 @@
                 <div class="p-6 border-b border-slate-100 bg-slate-50/50">
                     <h2 class="text-lg font-semibold text-slate-800 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                        Input Data
+                        <span data-i18n="input_data">Input Data</span>
                     </h2>
                 </div>
                 
                 <form action="{{ route('analyze') }}" method="POST" enctype="multipart/form-data" class="p-6 space-y-6" id="analysisForm">
                     @csrf
+                    <input type="hidden" name="language" id="selected_lang" value="en">
                     
                     <!-- Text Area -->
                     <div>
-                        <label for="inventory_list" class="block text-sm font-medium text-slate-700 mb-2">Inventory List</label>
+                        <label for="inventory_list" data-i18n="inventory_list" class="block text-sm font-medium text-slate-700 mb-2">Inventory List</label>
                         <textarea id="inventory_list" name="inventory_list" rows="6" 
                             class="w-full rounded-xl border-slate-200 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm p-4 bg-slate-50 focus:bg-white transition-colors placeholder:text-slate-400"
                             placeholder="Example:
@@ -90,7 +101,7 @@
 
                     <!-- File Upload -->
                     <div>
-                        <label class="block text-sm font-medium text-slate-700 mb-2">Room Image</label>
+                        <label data-i18n="room_image" class="block text-sm font-medium text-slate-700 mb-2">Room Image</label>
                         <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-slate-300 border-dashed rounded-xl hover:border-indigo-500 hover:bg-slate-50 transition-all cursor-pointer group relative">
                             <input id="room_image" name="room_image" type="file" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" accept="image/*" onchange="previewImage(event)" required>
                             <div class="space-y-1 text-center z-0">
@@ -98,10 +109,10 @@
                                     <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                                 <div class="flex text-sm text-slate-600 justify-center">
-                                    <span class="font-medium text-indigo-600 group-hover:text-indigo-500">Upload a file</span>
-                                    <p class="pl-1">or drag and drop</p>
+                                    <span data-i18n="upload_file" class="font-medium text-indigo-600 group-hover:text-indigo-500">Upload a file</span>
+                                    <p data-i18n="drag_drop" class="pl-1">or drag and drop</p>
                                 </div>
-                                <p class="text-xs text-slate-500">PNG, JPG, GIF up to 10MB</p>
+                                <p data-i18n="file_limit" class="text-xs text-slate-500">PNG, JPG, GIF up to 10MB</p>
                                 <p id="file-name" class="text-sm font-semibold text-indigo-600 mt-2 h-5"></p>
                             </div>
                         </div>
@@ -109,7 +120,7 @@
 
                     <!-- Submit Button -->
                     <button type="submit" id="submitBtn" class="w-full flex justify-center items-center py-3 px-4 border border-transparent rounded-xl shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 transition-all transform active:scale-95">
-                        <span id="btnText">Analyze Layout</span>
+                        <span id="btnText" data-i18n="analyze_layout">Analyze Layout</span>
                         <div id="btnLoader" class="loader ease-linear rounded-full border-2 border-t-2 border-slate-200 h-5 w-5 ml-2 hidden"></div>
                     </button>
                 </form>
@@ -120,17 +131,17 @@
                 <div class="p-6 border-b border-slate-100 bg-slate-50/50 flex justify-between items-center flex-shrink-0">
                     <h2 class="text-lg font-semibold text-slate-800 flex items-center">
                         <svg class="w-5 h-5 mr-2 text-indigo-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0121 18.382V7.618a1 1 0 01-.447-.894L15 7m0 13V7"></path></svg>
-                        Visual Analysis
+                        <span data-i18n="visual_analysis">Visual Analysis</span>
                     </h2>
                     <div class="flex items-center space-x-2">
                         @if(isset($recommendations))
                             <button onclick="exportPDF(this)" class="bg-indigo-600 hover:bg-indigo-700 text-white text-xs font-bold py-1.5 px-3 rounded-lg flex items-center transition-colors shadow-sm">
                                 <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
-                                Export PDF
+                                <span data-i18n="export_pdf">Export PDF</span>
                             </button>
                             <span class="bg-green-100 text-green-800 text-xs font-semibold px-2.5 py-0.5 rounded-full flex items-center">
                                 <span class="w-2 h-2 bg-green-500 rounded-full mr-1.5"></span>
-                                {{ count($recommendations) }} Items
+                                {{ count($recommendations) }} <span class="ml-1" data-i18n="items_count">Items</span>
                             </span>
                         @endif
                     </div>
@@ -145,6 +156,7 @@
                         </div>
                         <input type="text" id="findItemInput" 
                             class="block w-full pl-10 pr-3 py-2 border border-slate-200 rounded-lg leading-5 bg-slate-50 placeholder-slate-400 focus:outline-none focus:bg-white focus:ring-1 focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm transition duration-150 ease-in-out" 
+                            data-i18n="find_item"
                             placeholder="Find item by name..." 
                             oninput="filterItems(this.value)">
                     </div>
@@ -228,7 +240,7 @@
                         @else
                             <div class="text-center text-slate-400">
                                 <svg class="mx-auto h-16 w-16 text-slate-300 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                <p class="text-lg font-medium">No analysis yet</p>
+                                <p class="text-lg font-medium" data-i18n="no_analysis">No analysis yet</p>
                             </div>
                         @endif
                     </div>
@@ -241,7 +253,7 @@
                             @if(isset($hazards) && count($hazards) > 0)
                                 <div class="p-3 bg-red-50 border-b border-red-100 text-[10px] font-bold text-red-600 uppercase tracking-widest flex items-center">
                                     <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path></svg>
-                                    Safety Audit Findings
+                                    <span data-i18n="safety_audit_findings">Safety Audit Findings</span>
                                 </div>
                                 <ul class="divide-y divide-red-50 bg-red-50/30">
                                     @foreach($hazards as $index => $haz)
@@ -256,7 +268,7 @@
                                                 <div class="flex-1 min-w-0">
                                                     <div class="flex items-center justify-between mb-0.5">
                                                         <p class="text-xs font-bold text-red-900 uppercase">
-                                                            {{ $haz['severity'] }} Severity
+                                                            {{ $haz['severity'] }}
                                                         </p>
                                                     </div>
                                                     <p class="text-sm text-red-800 leading-relaxed">
@@ -271,7 +283,7 @@
 
                             <div class="p-3 bg-slate-50 border-b border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-widest flex items-center">
                                 <svg class="w-3 h-3 mr-1.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01m-.01 4h.01"></path></svg>
-                                Placement Recommendations
+                                <span data-i18n="placement_recommendations">Placement Recommendations</span>
                             </div>
                             
                             @if(isset($recommendations))
@@ -281,13 +293,16 @@
                                             $reasoning = strtolower($rec['reasoning']);
                                             $icon = '📦'; // Default
                                             $badgeClass = 'bg-green-100 text-green-800';
+                                            $typeLabel = 'standard';
                                             
                                             if (str_contains($reasoning, 'heavy') || str_contains($reasoning, 'bottom')) {
                                                 $icon = '🏋️';
                                                 $badgeClass = 'bg-red-100 text-red-800';
+                                                $typeLabel = 'heavy';
                                             } elseif (str_contains($reasoning, 'fragile') || str_contains($reasoning, 'glass')) {
                                                 $icon = '💎';
                                                 $badgeClass = 'bg-yellow-100 text-yellow-800';
+                                                $typeLabel = 'fragile';
                                             }
 
                                             // Utilization Score Logic
@@ -316,14 +331,14 @@
                                                         <p class="text-sm font-bold text-slate-900 truncate">
                                                             {{ $icon }} {{ $rec['item_name'] }}
                                                         </p>
-                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $badgeClass }}">
+                                                        <span class="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium {{ $badgeClass }}" data-i18n="{{ $typeLabel }}">
                                                             {{ ucwords($rec['type'] ?? 'Standard') }}
                                                         </span>
                                                     </div>
                                                     
                                                     <!-- Space Utilization Bar -->
                                                     <div class="flex items-center space-x-2 mb-2 mt-1">
-                                                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Density</span>
+                                                        <span class="text-[10px] font-semibold text-slate-400 uppercase tracking-wider" data-i18n="density">Density</span>
                                                         <div class="flex-grow h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                                             <div class="h-full rounded-full {{ $barColor }}" style="width: {{ $score }}%"></div>
                                                         </div>
@@ -339,7 +354,7 @@
                                     @endforeach
                                 </ul>
                             @else
-                                <div class="p-8 text-center text-slate-500 text-sm">
+                                <div class="p-8 text-center text-slate-500 text-sm" data-i18n="upload_to_see">
                                     Upload data to see breakdown here.
                                 </div>
                             @endif
@@ -451,19 +466,21 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="{{ asset('js/i18n.js') }}"></script>
     <script>
         window.jsPDF = window.jspdf.jsPDF;
 
         async function exportPDF(btn) {
+            const currentLang = localStorage.getItem('logivision_lang') || 'en';
             const originalText = btn.innerHTML;
-            btn.innerHTML = '<div class="loader ease-linear rounded-full border-2 border-t-2 border-white h-3 w-3 mr-2"></div> Generating...';
+            btn.innerHTML = `<div class="loader ease-linear rounded-full border-2 border-t-2 border-white h-3 w-3 mr-2"></div> ${translations[currentLang].generating}`;
             btn.classList.add('opacity-75', 'cursor-not-allowed');
             btn.disabled = true;
 
             try {
                 // 1. Get Visual Source
                 const sourceVisual = document.querySelector('.relative.inline-block');
-                if (!sourceVisual) throw new Error("No visual analysis found");
+                if (!sourceVisual) throw new Error(translations[currentLang].no_visual_found);
                 
                 // 2. Separate Data Sources
                 const hazardItems = document.querySelectorAll('li[id^="hazard-item-"]');
@@ -507,7 +524,7 @@
                     hazardsHtml = `
                         <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 10px; margin-top: 30px; color: #dc2626; text-transform: uppercase; display: flex; align-items: center;">
                             <span style="display: inline-block; width: 8px; height: 8px; background-color: #dc2626; border-radius: 50%; margin-right: 8px;"></span>
-                            Safety Audit Findings
+                            ${translations[currentLang].safety_audit_findings}
                         </h3>
                         <div style="border: 1px solid #fecaca; border-radius: 12px; background-color: #fef2f2; overflow: hidden; margin-bottom: 10px;">
                             ${hazardListInner}
@@ -538,9 +555,9 @@
                        let badgeBg = '#dcfce7';
                        let scoreColor = '#22c55e'; // Green
 
-                       if(badgeText.toLowerCase().includes('heavy')) {
+                       if(badgeEl && badgeEl.getAttribute('data-i18n') === 'heavy') {
                            badgeColor = '#ef4444'; badgeBg = '#fee2e2';
-                       } else if(badgeText.toLowerCase().includes('fragile')) {
+                       } else if(badgeEl && badgeEl.getAttribute('data-i18n') === 'fragile') {
                            badgeColor = '#eab308'; badgeBg = '#fef9c3';
                        }
 
@@ -562,7 +579,7 @@
 
                                <!-- PDF Density Bar -->
                                <div style="display: flex; align-items: center; margin-left: 66px; margin-bottom: 8px; margin-top: 2px;">
-                                   <span style="font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-right: 10px;">Density</span>
+                                   <span style="font-size: 9px; font-weight: 700; color: #94a3b8; text-transform: uppercase; margin-right: 10px;">${translations[currentLang].density}</span>
                                    <div style="flex-grow: 1; height: 5px; background-color: #f1f5f9; border-radius: 10px; overflow: hidden; max-width: 150px;">
                                        <div style="height: 100%; width: ${score}%; background-color: ${scoreColor}; border-radius: 10px;"></div>
                                    </div>
@@ -577,7 +594,7 @@
                     placementsHtml = `
                         <h3 style="font-size: 14px; font-weight: 700; margin-bottom: 10px; margin-top: 30px; color: #334155; text-transform: uppercase; display: flex; align-items: center;">
                             <span style="display: inline-block; width: 8px; height: 8px; background-color: #3b82f6; border-radius: 50%; margin-right: 8px;"></span>
-                            Placement Recommendations
+                            ${translations[currentLang].placement_recommendations}
                         </h3>
                         <div style="border: 1px solid #e2e8f0; border-radius: 12px; background-color: #ffffff;">
                             ${placementListInner}
@@ -630,7 +647,7 @@
                             </div>
                             <div style="text-align: right;">
                                 <div style="font-size: 32px; font-weight: 800; color: #4f46e5; line-height: 1;">${totalItems}</div>
-                                <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; color: #94a3b8;">Total Items</div>
+                                <div style="font-size: 10px; font-weight: 600; text-transform: uppercase; color: #94a3b8;">${translations[currentLang].items_count}</div>
                             </div>
                         </div>
                         
@@ -701,11 +718,12 @@
             const btn = document.getElementById('submitBtn');
             const loader = document.getElementById('btnLoader');
             const text = document.getElementById('btnText');
+            const currentLang = localStorage.getItem('logivision_lang') || 'en';
             
             btn.disabled = true;
             btn.classList.add('opacity-75', 'cursor-not-allowed');
             loader.classList.remove('hidden');
-            text.textContent = 'Analyzing...';
+            text.textContent = translations[currentLang].analyzing;
         });
     </script>
 </body>

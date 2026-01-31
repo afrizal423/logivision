@@ -28,6 +28,15 @@ class InventoryController extends Controller
 
             // 2. Prepare API Request
             $apiKey = env('GEMINI_API_KEY');
+            $selectedLang = $request->input('language', 'en');
+            $langNames = [
+                'en' => 'English (US)',
+                'id' => 'Indonesian',
+                'ja' => 'Japanese',
+                'zh' => 'Chinese',
+                'es' => 'Spanish'
+            ];
+            $langName = $langNames[$selectedLang] ?? 'English (US)';
             
             $apiUrl = "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent"; 
 
@@ -37,6 +46,8 @@ class InventoryController extends Controller
                 
                 Task 1: Determine the best placement for the inventory items based on physics and logic (Heavy=bottom, Fragile=top).
                 Task 2: Safety Audit. Identify potential safety hazards in the current room setup (e.g., liquids near electronics, blocked exits, precarious stacking, trip hazards).
+
+                IMPORTANT: Your output 'reasoning', 'description', 'severity', and 'item_name' MUST be in the {$langName} language.
 
                 Output PURE JSON with this schema:
                 {
