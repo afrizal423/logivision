@@ -26,6 +26,37 @@ LogiVision is an AI-powered logistics assistant designed for Hackathons. It help
 
 ## Architectural diagram
 <img width="2816" height="1536" alt="Gemini_Generated_Image_frtckgfrtckgfrtc" src="https://github.com/user-attachments/assets/cdb5014a-dd3d-4021-bb35-3c1e7b5506c3" />
+The diagram illustrates the high-level architecture of **LogiVision**, designed as a streamlined Monolithic application using PHP (Laravel) that interacts with Google's Cloud AI services. The workflow is divided into three main layers: the Client (Frontend), the Server (Backend), and External Services (AI).
+
+#### 1. Client / Frontend (User's Browser)
+This layer represents the user interface where the interaction begins.
+* **User Actor:** The warehouse manager or store owner who initiates the process by uploading a photo of their storage space and providing a text-based inventory list.
+* **Tech Stack:** Built using **Blade Templates** for structure, **Tailwind CSS** for the modern UI, and **Vanilla JavaScript** for interactive elements.
+* **Action:** When the user clicks "Analyze," the browser bundles the image (converted to Base64) and the text data into a secure **POST Request** sent to the backend.
+
+#### 2. Server / Backend (PHP/Laravel Monolith)
+This is the "brain" of the application that orchestrates data flow and business logic.
+* **Laravel Controller:** The core component that handles:
+    * **Validation:** Ensuring the uploaded file is a valid image and the inventory list is readable.
+    * **Prompt Engineering:** Constructing the complex system instruction that tells the AI exactly how to behave (e.g., "Heavy items go to the bottom").
+    * **Coordinate Mapping:** After receiving the AI's response, the controller mathematically maps the normalized AI coordinates (0-1000 scale) into CSS percentages (%) for responsive rendering on the frontend.
+* **Storage:**
+    * **Local Storage:** Temporarily holds the uploaded images for processing.
+    * **SQLite Database:** Stores logs, session data, or historical analysis results.
+
+#### 3. External Services (Google Cloud AI)
+The intelligence layer that performs the complex reasoning.
+* **Gemini 3 Flash API:** The backend sends the constructed prompt and image to this API.
+* **Capabilities:**
+    * **Multimodal Spatial Reasoning:** It "sees" the depth and layout of the room.
+    * **Safety Audit:** It identifies hazards (like liquids near electronics).
+    * **Strict JSON Output:** It returns structured data containing the bounding box coordinates (`[ymin, xmin, ymax, xmax]`), reasoning, and safety alerts.
+
+#### Data Flow Summary
+1.  **Request:** Client sends Image + Inventory to Laravel.
+2.  **Processing:** Laravel prepares the payload and sends a request to Gemini 3 Flash.
+3.  **Analysis:** Gemini analyzes the visual data and returns a JSON response.
+4.  **Rendering:** Laravel processes the JSON, calculates the overlay positions, and returns the final View to the client, displaying the Augmented Reality (AR) style boxes over the original image.
 
 
 ## 🛠️ Tech Stack
