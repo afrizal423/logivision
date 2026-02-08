@@ -24,6 +24,10 @@ LogiVision is an AI-powered logistics assistant designed for Hackathons. It help
     - Generates a multi-page A4 document report.
     - Includes Safety Audit findings and Placement Recommendations with density metrics.
 
+## Architectural diagram
+<img width="2816" height="1536" alt="Gemini_Generated_Image_frtckgfrtckgfrtc" src="https://github.com/user-attachments/assets/cdb5014a-dd3d-4021-bb35-3c1e7b5506c3" />
+
+
 ## 🛠️ Tech Stack
 
 - **Framework**: Laravel 10
